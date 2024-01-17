@@ -48,7 +48,7 @@ def main():
             def update_progress(progress):
                 progress_bar.progress(progress)
 
-            st.text("Processing data...")
+            st.text("Gathering data from Wikipedia. This step can take some time with larger datasets!")
             processed_df = dp.process_species_data(df, chat=chat, output_parser=output_parser, template_string=template_string, format_instructions=format_instructions, progress_callback=update_progress)
 
             # Display processed data
@@ -74,8 +74,13 @@ def main():
     extracted and used by the LLM when arriving at it.
                 
     You can either run it with a single species, country combination, or by uploading a CSV with a 'species' column and a 'country' column.
-    
-    ### Note 
+    ### Interpreting Results
+    The results will show the country, species, whatever wikipedia context was extracted, the explicit alien and native ranges, the reasoning
+    steps that the LLM used, and the cited part of the context that was used to make the decision. However, the non-deterministic nature of LLMs
+    will sometimes introduce unwanted results. This is especially true if the species names are not spelled correctly, but can happen in cases where
+    no context was provided at all. 
+                
+    ### Note about API usage
     For now, my own OpenAI API key is used, and since I don't anticipate a lot of traffic, that is fine. If you
     happened to find this and would like to use it for a larger dataset, please reach out first and I can help you 
     set up your own API key.

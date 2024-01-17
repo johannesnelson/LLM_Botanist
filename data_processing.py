@@ -15,8 +15,8 @@ from json.decoder import JSONDecodeError
 import streamlit as st
 
 def fetch_species_info_wiki(species_name):
-    placeholder = st.empty()
-    placeholder.empty()
+    # placeholder = st.empty()
+    # placeholder.empty()
     print("Searching wikipedia for", species_name)
     
     try:
@@ -25,8 +25,8 @@ def fetch_species_info_wiki(species_name):
         
 
         if not search_results:
-            wiki_feedback = "No plant info found for " + species_name
-            placeholder.text(wiki_feedback)
+            # wiki_feedback = "No plant info found for " + species_name
+            # placeholder.text(wiki_feedback)
             plant_info = f"No context provided for {species_name}. No decision is possible"
 
             return plant_info
@@ -37,8 +37,8 @@ def fetch_species_info_wiki(species_name):
             page_content = wikipedia.page(page_title).content
         except wikipedia.exceptions.DisambiguationError:
             # Skip disambiguation pages
-            wiki_feedback = "No plant info found for " + species_name
-            placeholder.text(wiki_feedback)
+            # wiki_feedback = "No plant info found for " + species_name
+            # placeholder.text(wiki_feedback)
             plant_info = f"No context provided for {species_name}. No decision is possible"
             return plant_info
 
@@ -55,14 +55,14 @@ def fetch_species_info_wiki(species_name):
         plant_info = ' '.join(sentences).replace('\n', ' ').replace('\t', ' ').replace('\r', ' ')
         if len(sentences) > 0:
             print("Plant info found!")
-            wiki_feedback = "Plant info found for " + species_name
+            # wiki_feedback = "Plant info found for " + species_name
         elif len(sentences) == 0:
             print("No information found.")
-            wiki_feedback = "No plant info found for " + species_name
+            # wiki_feedback = "No plant info found for " + species_name
             plant_info = "No context provided. No decision is possible"
         # placeholder = st.empty()
         # placeholder.empty()
-        placeholder.text(wiki_feedback)
+        # placeholder.text(wiki_feedback)
         
         return plant_info
 
@@ -98,12 +98,14 @@ def process_species_data(df, chat, output_parser, template_string, format_instru
     total_rows = len(df)
     total_complete = 0
 
+    placeholder = st.empty()
+
     updated_df['wiki_info'] = updated_df['species'].apply(fetch_species_info_wiki)
     updated_df['wiki_info'] = updated_df['wiki_info'].str.replace('\n', ' ', regex=False)
     updated_df['wiki_info'] = updated_df['wiki_info'].str.replace('\r', ' ', regex=False)
     updated_df['wiki_info'] = updated_df['wiki_info'].str.replace('=', ' ', regex=False)
 
-    placeholder = st.empty()
+    # placeholder = st.empty()
     for index, row in updated_df.iterrows():
         total_complete += 1
         species = row['species']
@@ -143,8 +145,17 @@ def process_species_data(df, chat, output_parser, template_string, format_instru
         results_native_range.append(native_range)
         results_alien_range.append(alien_range)
         # placeholder.empty()
-        report_out = "Results for " + species + " in " + country + "\nNative range: " + native_range + "\nAlien range: " + alien_range + "\nReasoning: " + reasoning + "\nDecision: " + decision + "\n"
-        placeholder.text(report_out)
+        # report_out = "Results for " + species + " in " + country + ":\n\nNative range: " + native_range + "\nAlien range: " + alien_range + "\nReasoning: " + reasoning + "\n\nDecision: " + decision + "\n"
+        report_out = (
+        f"### Results for {species} in {country}:\n\n"
+        f"**Wikipedia Context:** {context}\n\n"
+        f"**Native range:** {native_range}\n\n"
+        f"**Alien range:** {alien_range}\n\n"
+        f"**Context Citation:** {information_source}\n\n"
+        f"**Reasoning:** {reasoning}\n\n"
+        f"**Decision:** {decision}\n"
+)
+        placeholder.markdown(report_out)
 
     # Update DataFrame
     updated_df['decision'] = results_decision
