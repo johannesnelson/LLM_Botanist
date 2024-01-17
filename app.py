@@ -10,6 +10,19 @@ import openai
 load_dotenv()
 api_key = os.environ.get("OPENAI_API_KEY")
 
+demo_data = {
+    'species': [
+        'Acacia binervia', 'Acacia brachybotrya', 'Adenanthera pavonina',
+        'Albizia lebbeck', 'Andira anthelmia',
+        'Andira fraxinifolia', 'Cedrela odorata'
+    ],
+    'country': [
+        'Australia', 'Australia', 'Democratic Republic of Congo',
+        'Madagascar', 'Brazil',
+        'Brazil', 'Mexico'
+    ]
+}
+demo_data = pd.DataFrame(demo_data)
 
 
 def main():
@@ -17,14 +30,20 @@ def main():
 
     df = None
     # File uploader widget
+    demo_button = st.button('Run Demo')
+    if demo_button:
+        df = pd.DataFrame(demo_data)
+        st.markdown("""
+        ## This is the demo dataset that is being processed:
+                    """)
+        st.write(demo_data)
     uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
-
     with st.form("single_species_form"):
         st.write("Or enter details manually:")
         input_species = st.text_input("Species (scientific name)")
         input_country = st.text_input("Country")
         submit_button = st.form_submit_button(label='Process Single Entry')
-
+        
 
     if uploaded_file is not None:
         # Read CSV file
@@ -34,6 +53,7 @@ def main():
             df = pd.DataFrame({'species': [input_species], 'country': [input_country]})
         else:
             st.warning("Please enter both species and country.")
+    
 
     if df is not None:
         chat = pcc.prepare_LLM()
@@ -41,7 +61,7 @@ def main():
         response_schemas, output_parser, format_instructions = pcc.prepare_chat_schemas()
         
         # Process data
-        if st.button('Process Data') | submit_button:
+        if st.button('Process Data') | submit_button | demo_button:
 
             progress_bar = st.progress(0)  # Initialize the progress bar
             
@@ -52,6 +72,9 @@ def main():
             processed_df = dp.process_species_data(df, chat=chat, output_parser=output_parser, template_string=template_string, format_instructions=format_instructions, progress_callback=update_progress)
 
             # Display processed data
+            st.markdown("""
+                        ## Results
+                        """)
             st.write(processed_df)
             csv = processed_df.to_csv(index=False)  # Set index=False to exclude row indices from the CSV
             st.download_button(
