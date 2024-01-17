@@ -26,9 +26,10 @@ def main():
         chat = pcc.prepare_LLM()
         template_string = pcc.prepare_template_string()
         response_schemas, output_parser, format_instructions = pcc.prepare_chat_schemas()
-
+        
         # Process data
         if st.button('Process Data'):
+
             progress_bar = st.progress(0)  # Initialize the progress bar
             
             def update_progress(progress):

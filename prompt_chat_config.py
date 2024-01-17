@@ -29,7 +29,7 @@ def prepare_template_string():
     contextual information. This provided context is the only information you \
     may use when making a decision. If the context is unavailable or irrelevant,\
     your decision must be 'unknown'. You must never decide a plant is native or \
-    alien unless you have been provided conclusive context ptovided, even if you \
+    alien unless you have been provided conclusive context, even if you \
     think you know the answer.You must also be very careful to only consider the\
     plant within the country under review. The context may contain information \
     about its status in other regions, but you must stay focused when making a \

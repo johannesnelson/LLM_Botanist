@@ -16,9 +16,11 @@ import streamlit as st
 
 def fetch_species_info_wiki(species_name):
     print("Searching wikipedia for", species_name)
+    
     try:
         # Search for the page title on Wikipedia
         search_results = wikipedia.search(species_name)
+        
 
         if not search_results:
             return f"No Wikipedia entry could be found for {species_name}"
@@ -42,7 +44,17 @@ def fetch_species_info_wiki(species_name):
         # Process the content to extract relevant information
         sentences = [sentence for sentence in page_content.split('. ') if any(keyword in sentence.lower() for keyword in keywords)]
         plant_info = ' '.join(sentences).replace('\n', ' ').replace('\t', ' ').replace('\r', ' ')
-        print("Plant info found!")
+        if len(sentences) > 0:
+            print("Plant info found!")
+            wiki_feedback = "Plant info found for " + species_name
+        elif len(sentences) == 0:
+            print("No information found.")
+            wiki_feedback = "No plant info found for " + species_name
+            plant_info = "No context provided. No decision is possible"
+        placeholder = st.empty()
+        placeholder.empty()
+        placeholder.text(wiki_feedback)
+        
         return plant_info
 
     except wikipedia.exceptions.PageError:
@@ -120,7 +132,7 @@ def process_species_data(df, chat, output_parser, template_string, format_instru
         results_native_range.append(native_range)
         results_alien_range.append(alien_range)
         placeholder.empty()
-        report_out = "Native range: " + native_range + "\n Alien range: " + alien_range + "\n Reasoning: " + reasoning + "\nDecision: " + decision + "\n"
+        report_out = "Results for " + species + "in "+ country+ "\nNative range: " + native_range + "\nAlien range: " + alien_range + "\nReasoning: " + reasoning + "\nDecision: " + decision + "\n"
         placeholder.text(report_out)
 
     # Update DataFrame
