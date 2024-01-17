@@ -1,13 +1,13 @@
 import wikipedia
-import os
-import ast
-import openai
+# import os
+# import ast
+# import openai
 from dotenv import load_dotenv, find_dotenv
-import datetime
+# import datetime
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.callbacks import get_openai_callback
-import json
+# import json
 import pandas as pd
 from langchain.output_parsers import ResponseSchema
 from langchain.output_parsers import StructuredOutputParser
@@ -25,7 +25,11 @@ def fetch_species_info_wiki(species_name):
         
 
         if not search_results:
-            return f"No Wikipedia entry could be found for {species_name}"
+            wiki_feedback = "No plant info found for " + species_name
+            placeholder.text(wiki_feedback)
+            plant_info = f"No context provided for {species_name}. No decision is possible"
+
+            return plant_info
 
         try:
             # Attempt to get the page content for the first result
@@ -33,7 +37,10 @@ def fetch_species_info_wiki(species_name):
             page_content = wikipedia.page(page_title).content
         except wikipedia.exceptions.DisambiguationError:
             # Skip disambiguation pages
-            return f"Disambiguation page found for {species_name}, skipping."
+            wiki_feedback = "No plant info found for " + species_name
+            placeholder.text(wiki_feedback)
+            plant_info = f"No context provided for {species_name}. No decision is possible"
+            return plant_info
 
         # Define keywords for filtering
         keywords = [
@@ -61,7 +68,10 @@ def fetch_species_info_wiki(species_name):
 
     except wikipedia.exceptions.PageError:
         print("No plant info found!")
-        return f"No context provided for {species_name}. No decision is possible"
+        wiki_feedback = "No plant info found for " + species_name
+        placeholder.text(wiki_feedback)
+        plant_info = f"No context provided for {species_name}. No decision is possible"
+        return plant_info
 
 
 def process_species_data(df, chat, output_parser, template_string, format_instructions, progress_callback=None):

@@ -20,7 +20,7 @@ def main():
 
     with st.form("single_species_form"):
         st.write("Or enter details manually:")
-        input_species = st.text_input("Species")
+        input_species = st.text_input("Species (scientific name)")
         input_country = st.text_input("Country")
         submit_button = st.form_submit_button(label='Process Single Entry')
 
