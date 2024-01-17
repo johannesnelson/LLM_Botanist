@@ -15,6 +15,8 @@ from json.decoder import JSONDecodeError
 import streamlit as st
 
 def fetch_species_info_wiki(species_name):
+    placeholder = st.empty()
+    placeholder.empty()
     print("Searching wikipedia for", species_name)
     
     try:
@@ -51,15 +53,15 @@ def fetch_species_info_wiki(species_name):
             print("No information found.")
             wiki_feedback = "No plant info found for " + species_name
             plant_info = "No context provided. No decision is possible"
-        placeholder = st.empty()
-        placeholder.empty()
+        # placeholder = st.empty()
+        # placeholder.empty()
         placeholder.text(wiki_feedback)
         
         return plant_info
 
     except wikipedia.exceptions.PageError:
         print("No plant info found!")
-        return f"No Wikipedia entry could be found for {species_name}"
+        return f"No context provided for {species_name}. No decision is possible"
 
 
 def process_species_data(df, chat, output_parser, template_string, format_instructions, progress_callback=None):
@@ -86,7 +88,6 @@ def process_species_data(df, chat, output_parser, template_string, format_instru
     total_rows = len(df)
     total_complete = 0
 
-    
     df['wiki_info'] = df['species'].apply(fetch_species_info_wiki)
     df['wiki_info'] = df['wiki_info'].str.replace('\n', ' ', regex=False)
     df['wiki_info'] = df['wiki_info'].str.replace('\r', ' ', regex=False)
@@ -131,8 +132,8 @@ def process_species_data(df, chat, output_parser, template_string, format_instru
         results_reasoning.append(reasoning)
         results_native_range.append(native_range)
         results_alien_range.append(alien_range)
-        placeholder.empty()
-        report_out = "Results for " + species + "in "+ country+ "\nNative range: " + native_range + "\nAlien range: " + alien_range + "\nReasoning: " + reasoning + "\nDecision: " + decision + "\n"
+        # placeholder.empty()
+        report_out = "Results for " + species + " in " + country + "\nNative range: " + native_range + "\nAlien range: " + alien_range + "\nReasoning: " + reasoning + "\nDecision: " + decision + "\n"
         placeholder.text(report_out)
 
     # Update DataFrame
