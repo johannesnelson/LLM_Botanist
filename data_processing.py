@@ -12,6 +12,7 @@ import pandas as pd
 from langchain.output_parsers import ResponseSchema
 from langchain.output_parsers import StructuredOutputParser
 from json.decoder import JSONDecodeError
+import streamlit as st
 
 def fetch_species_info_wiki(species_name):
     print("Searching wikipedia for", species_name)
@@ -79,7 +80,7 @@ def process_species_data(df, chat, output_parser, template_string, format_instru
     df['wiki_info'] = df['wiki_info'].str.replace('\r', ' ', regex=False)
     df['wiki_info'] = df['wiki_info'].str.replace('=', ' ', regex=False)
 
-
+    placeholder = st.empty()
     for index, row in df.iterrows():
         total_complete += 1
         species = row['species']
@@ -118,6 +119,9 @@ def process_species_data(df, chat, output_parser, template_string, format_instru
         results_reasoning.append(reasoning)
         results_native_range.append(native_range)
         results_alien_range.append(alien_range)
+        placeholder.empty()
+        report_out = "Native range: " + native_range + "\n Alien range: " + alien_range + "\n Reasoning: " + reasoning + "\nDecision: " + decision + "\n"
+        placeholder.text(report_out)
 
     # Update DataFrame
     updated_df['decision'] = results_decision
@@ -125,4 +129,5 @@ def process_species_data(df, chat, output_parser, template_string, format_instru
     updated_df['reasoning'] = results_reasoning
     updated_df['native_range'] = results_native_range
     updated_df['alien_range'] = results_alien_range
+    
     return updated_df
