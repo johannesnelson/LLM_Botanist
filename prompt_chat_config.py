@@ -2,7 +2,7 @@
 # import wikipedia
 # import os
 # import ast
-# import openai
+import openai
 from dotenv import load_dotenv, find_dotenv
 # import datetime
 from langchain.chat_models import ChatOpenAI

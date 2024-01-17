@@ -98,16 +98,16 @@ def process_species_data(df, chat, output_parser, template_string, format_instru
     total_rows = len(df)
     total_complete = 0
 
-    df['wiki_info'] = df['species'].apply(fetch_species_info_wiki)
-    df['wiki_info'] = df['wiki_info'].str.replace('\n', ' ', regex=False)
-    df['wiki_info'] = df['wiki_info'].str.replace('\r', ' ', regex=False)
-    df['wiki_info'] = df['wiki_info'].str.replace('=', ' ', regex=False)
+    updated_df['wiki_info'] = updated_df['species'].apply(fetch_species_info_wiki)
+    updated_df['wiki_info'] = updated_df['wiki_info'].str.replace('\n', ' ', regex=False)
+    updated_df['wiki_info'] = updated_df['wiki_info'].str.replace('\r', ' ', regex=False)
+    updated_df['wiki_info'] = updated_df['wiki_info'].str.replace('=', ' ', regex=False)
 
     placeholder = st.empty()
-    for index, row in df.iterrows():
+    for index, row in updated_df.iterrows():
         total_complete += 1
         species = row['species']
-        country = row['country_name']
+        country = row['country']
         context = row['wiki_info']
         print("Processing", total_complete, "out of", total_rows, ":\n", species, "in", country)
 
