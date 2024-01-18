@@ -17,15 +17,20 @@ solution.
 ## The LLM-powered Classifier
 My solution involved writing a script to process species-country pairings that essentially does the following:
 1.) Query Wikipedia for information about the plant.
+
 2.) Filter the page content that is returned so that only sentences with relevant key words are included
 (i.e. native, alien, endemic, range, invasive, etc.)
+
 3.) Using LangChain to engineer prompts and bring an LLM into the loop, parse this wikipedia context for specific, 
 relevant information like...
+
 * Native range
+
 * Alien range
+
 4.) Only using the information that you extracted, make a classifcation decision.
 
-I talk about the process a bit more in depth here, and I put it all into a Streamlit app
+I talk about the process a bit more in depth here, and I put it all into a [Streamlit app](https://llm-botanist.streamlit.app/)
 with a runnable demo here. Aside from the demo, which you can run by clicking the 'run' demo
 button at the top, you can also input your own text to process a single pairing or your own 
 CSV with columns for 'species' and 'country' to process multiple. 
