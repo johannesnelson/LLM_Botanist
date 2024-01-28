@@ -37,7 +37,7 @@ def main():
         ## This is the demo dataset that is being processed:
                     """)
         st.write(demo_data)
-    uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
+    uploaded_file = st.file_uploader("Upload a CSV file with a 'species' and a 'country' column", type="csv")
     with st.form("single_species_form"):
         st.write("Or enter details manually:")
         input_species = st.text_input("Species (scientific name)")
@@ -88,15 +88,15 @@ def main():
     st.markdown("""
     ### Overview            
     This tool uses GPT 3.5 Turbo from OpenAI to help classify plant species in certain countries as either native or alien,
-    based solely on context from Wikipedia to avoid hallucinations. To accomplish this, it first queries Wikipedia for information
-    about the plant. It filters theresults of this query with keywords to help cut down on the context sent to the LLM.
+    based solely on context from Wikipedia. To accomplish this, it first queries Wikipedia for information
+    about the plant. It filters the results of this query with keywords to help cut down on the context sent to the LLM.
                 
     Then, using a prompt schema designed with LangChain, the LLM attempts to determine the native range and the alien range of the plant. The model is then
     instructed to explicitly state its reasoning using these delineated ranges before making a classification 
     decision. If no Wikipedia context is found, no decision is made. The output is a dataframe with a classifcation decision and all the context
     extracted and used by the LLM when arriving at it.
                 
-    You can either run it with a single species, country combination, or by uploading a CSV with a 'species' column and a 'country' column.
+    You can either run it with a single species-country combination entered manually or by uploading a CSV with a 'species' column and a 'country' column.
     ### Interpreting Results
     The results will show the country, species, whatever wikipedia context was extracted, the explicit alien and native ranges, the reasoning
     steps that the LLM used, and the cited part of the context that was used to make the decision. However, the non-deterministic nature of LLMs

@@ -1,14 +1,9 @@
 
-# import wikipedia
-# import os
-# import ast
 import openai
 from dotenv import load_dotenv, find_dotenv
-# import datetime
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.callbacks import get_openai_callback
-# import json
 import pandas as pd
 from langchain.output_parsers import ResponseSchema
 from langchain.output_parsers import StructuredOutputParser
